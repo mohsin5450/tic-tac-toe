@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TICTOETAC</title>
+    <style>
+      .main {
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        cursor: pointer;
+      }
+      #game {
+        display: grid;
+        grid-template-columns: 90px 90px 90px;
+        background-color: #2196f3;
+        padding: 5px;
+        width: 17rem;
+        justify-content: center;
+        align-items: center;
+      }
+      .turndiv {
+        margin-top: -5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .cells {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.8);
+
+        height: 5rem;
+        font-size: 30px;
+        text-align: center;
+      }
+      #winner {
+        margin-top: -8px;
+      }
+      #image {
+        margin-top: 2px;
+        width: 250px;
+        height: 150px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <h2>WELLCome to Tic Tac Toe</h2>
+      <div class="turndiv">
+        <h2 id="turn">Turn:<span id="player"></span></h2>
+        <h2 id="winner"></h2>
+      </div>
+      <div id="game"></div>
+      <img src="" alt="image" id="image" />
+    </div>
+    <script>
+      var cells = ["", "", "", "", "", "", "", "", ""];
+      const winning = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
+      let winner = "";
+
+      for (var cell in cells) {
+        var elem = document.createElement("div");
+        elem.id = "cl" + cell;
+        document.getElementById("game").appendChild(elem);
+        elem.classList.add("cells");
+        document.getElementById("cl" + cell).innerHTML = cells[cell];
+      }
+      let i = 0;
+      document.getElementById("player").innerHTML = " p1";
+      document.getElementById("player").style.color = "green";
+      let totalcells = document
+        .querySelectorAll(".cells")
+        .forEach((box, index) => {
+          box.addEventListener("click", () => {
+            if (box.innerHTML !== "") {
+            } else {
+              if (i == 0 && winner == "") {
+                box.innerHTML = "p1";
+                cells[index] = "p1";
+                var gameState = win("p1");
+                i++;
+                if (gameState === 1) {
+                  document.getElementById("turn").innerHTML = "Game Over";
+                  document.getElementById("turn").style.color = "red";
+                } else {
+                  document.getElementById("player").innerHTML = " p2";
+                  document.getElementById("player").style.color = "green";
+                }
+              } else if (i == 1 && winner == "") {
+                box.innerHTML = "p2";
+                cells[index] = "p2";
+                var gameState = win("p2");
+                i--;
+                if (gameState === 1) {
+                  document.getElementById("turn").innerHTML = "Game Over";
+                  document.getElementById("turn").style.color = "red";
+                } else {
+                  document.getElementById("player").innerHTML = " p1";
+                  document.getElementById("player").style.color = "green";
+                }
+              }
+            }
+          });
+        });
+      function win(player) {
+        for (var w in winning) {
+          const p = winning[w];
+
+          if (cells[p[0]] === "" || cells[p[1]] === "" || cells[p[2]] === "") {
+            continue;
+          }
+          if (
+            cells[p[0]] === player &&
+            cells[p[1]] === player &&
+            cells[p[2]] === player
+          ) {
+            winner = player;
+
+            document.getElementById("cl" + p[0]).style.cssText =
+              "background-color:red";
+            document.getElementById("cl" + p[1]).style.cssText =
+              "background-color:red";
+            document.getElementById("cl" + p[2]).style.cssText =
+              "background-color:red";
+            document.getElementById("turn").innerHTML = "Game Over";
+            document.getElementById("winner").innerHTML =
+              winner + " win the game";
+            document.getElementById("winner").style.cssText =
+              "color:green; font-size: 30px;";
+            document.body.style.backgroundImage = "url('congrats.gif')";
+            document.getElementById("image").src = "win.gif";
+
+            return 1;
+          }
+          if (!cells.includes("") && winner === "") {
+            document.getElementById("winner").innerHTML = "Game Tie";
+            document.getElementById("winner").style.cssText =
+              "color:green; font-size: 30px;";
+            document.getElementById("image").src = "tie match.gif";
+            return 1;
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
